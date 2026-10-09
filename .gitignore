@@ -1,0 +1,11 @@
+.env
+backend/.env
+node_modules
+dist
+dev-dist
+__pycache__
+venv
+**/.venv/
+*.py[cod]
+backend/eval_images
+backend/eval_results.csv

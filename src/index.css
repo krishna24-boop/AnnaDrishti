@@ -1,0 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;800&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Mukta", system-ui, sans-serif;
+  --color-pine: #1e3b2f;
+  --color-mist: #eef2ec;
+  --color-apple: #b83a3a;
+  --color-straw: #d9a31e;
+}
+body { background: var(--color-mist); color: #16241c; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }

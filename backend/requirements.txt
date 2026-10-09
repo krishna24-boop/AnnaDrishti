@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+python-multipart
+anthropic
+python-dotenv
+pillow
+httpx
+pymongo
+dnspython
