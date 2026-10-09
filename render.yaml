@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: annadrishti
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: MONGODB_URI
+        sync: false
+      - key: MONGODB_DATABASE
+        value: annadrishti
+      - key: DEMO_MODE
+        value: "0"

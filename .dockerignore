@@ -1,0 +1,11 @@
+.git
+.env
+**/.env
+**/.venv
+**/venv
+**/__pycache__
+node_modules
+dist
+dev-dist
+backend/eval_images
+backend/eval_results.csv

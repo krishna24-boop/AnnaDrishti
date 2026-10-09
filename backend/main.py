@@ -4,6 +4,7 @@ from datetime import datetime, time, timedelta, timezone
 from typing import Optional
 from fastapi import FastAPI, File, Form, HTTPException, Response, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 from dotenv import load_dotenv
 import httpx
@@ -423,3 +424,8 @@ async def diagnose(
         result["history_saved"] = False
         result["history_error"] = "जाँच हो गई, लेकिन फ़सल इतिहास MongoDB में सेव नहीं हुआ। Atlas कनेक्शन जाँचें।"
     return result
+
+
+frontend_dist = os.path.join(os.path.dirname(os.path.dirname(__file__)), "dist")
+if os.path.isdir(frontend_dist):
+    app.mount("/", StaticFiles(directory=frontend_dist, html=True), name="frontend")

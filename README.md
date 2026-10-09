@@ -28,6 +28,12 @@ Terminal 2 (frontend):
 - `npm run dev` development ke liye hai; offline app-shell/PWA behavior build + preview/deployment par test karein.
 - Pending photos उसी browser/device पर रहती हैं; diagnosis server पर तभी जाती है जब connection वापस आता है.
 
+## Render par deploy
+- Project ke GitHub repo ko Render Blueprint ke roop mein connect karein; `render.yaml` Docker-based web service define karta hai.
+- Setup ke waqt `GEMINI_API_KEY` aur `MONGODB_URI` Render dashboard mein secret environment variables ke roop mein set karein. Inhe GitHub ya `render.yaml` mein commit na karein.
+- MongoDB Atlas Network Access mein Render ke outbound IPs allow karein; Atlas par `0.0.0.0/0` sirf tab use karein jab is prototype ke liye us risk ko samajhkar accept karein.
+- Render service frontend aur API dono ko ek HTTPS origin se serve karti hai. Free instance kuch der idle rehne par sleep ho sakta hai; pehli request ko start hone mein waqt lag sakta hai.
+
 ## Files
 - backend/main.py     : /api/diagnose, /api/history (MongoDB Atlas), /api/weather-risk, /api/health
 - backend/eval.py     : eval_images/<label>/*.jpg par accuracy napta hai (slide ka asli number)
