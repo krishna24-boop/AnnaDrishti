@@ -31,7 +31,8 @@ Terminal 2 (frontend):
 ## Render par deploy
 - Project ke GitHub repo ko Render Blueprint ke roop mein connect karein; `render.yaml` Docker-based web service define karta hai.
 - Setup ke waqt `GEMINI_API_KEY` aur `MONGODB_URI` Render dashboard mein secret environment variables ke roop mein set karein. Inhe GitHub ya `render.yaml` mein commit na karein.
-- MongoDB Atlas Network Access mein Render ke outbound IPs allow karein; Atlas par `0.0.0.0/0` sirf tab use karein jab is prototype ke liye us risk ko samajhkar accept karein.
+- Agar MongoDB Atlas connect na ho, Render service ke **Connect → Outbound IP Addresses** mein dikh rahe CIDR ranges ko Atlas **Network Access → IP Access List** mein add karein. Render ke shared ranges doosre Render services ke saath bhi shared hote hain; `0.0.0.0/0` se bachein.
+- Gemini ke liye default `GEMINI_MODEL=gemini-3-flash-preview` hai. Agar model 404 aaye, Render Environment mein `GEMINI_MODEL` verify karein; API key 400/401/403 de to Render mein valid AI Studio key set karein.
 - Render service frontend aur API dono ko ek HTTPS origin se serve karti hai. Free instance kuch der idle rehne par sleep ho sakta hai; pehli request ko start hone mein waqt lag sakta hai.
 
 ## Files

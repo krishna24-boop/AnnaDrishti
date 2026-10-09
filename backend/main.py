@@ -37,7 +37,7 @@ if CLAUDE_KEY == "your_key_here":
 if GEMINI_KEY == "your_key_here":
     GEMINI_KEY = ""
 PROVIDER = "gemini" if GEMINI_KEY else "claude" if CLAUDE_KEY else None
-MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash") if PROVIDER == "gemini" \
+MODEL = os.getenv("GEMINI_MODEL", "gemini-3-flash-preview") if PROVIDER == "gemini" \
     else os.getenv("CLAUDE_MODEL", "claude-sonnet-5-5")
 DEMO = os.getenv("DEMO_MODE") == "1" or PROVIDER is None
 MONGODB_URI = os.getenv("MONGODB_URI", "").strip()
@@ -92,6 +92,12 @@ def _ask_gemini(data: bytes, crop: str) -> str:
     )
     if r.status_code == 429:
         raise RuntimeError("Gemini free limit lag gayi, 1 minute ruk kar dobara try karein")
+    if r.status_code == 404:
+        logger.error("Gemini model %s was not found (HTTP 404)", MODEL)
+        raise RuntimeError(f"Gemini model {MODEL} उपलब्ध नहीं है। Render में GEMINI_MODEL जाँचें।")
+    if r.status_code in (400, 401, 403):
+        logger.error("Gemini diagnosis request was rejected (HTTP %s)", r.status_code)
+        raise RuntimeError("Gemini ने API key या model access अस्वीकार किया। Render में GEMINI_API_KEY जाँचें।")
     r.raise_for_status()
     return r.json()["candidates"][0]["content"]["parts"][0]["text"]
 
@@ -309,6 +315,12 @@ def ask_assistant(request: AssistantQuestion):
         )
         if response.status_code == 429:
             raise HTTPException(429, "Gemini की मुफ्त सीमा पूरी हो गई। थोड़ी देर बाद फिर पूछें।")
+        if response.status_code == 404:
+            logger.error("Gemini model %s was not found (HTTP 404)", MODEL)
+            raise HTTPException(502, f"Gemini model {MODEL} उपलब्ध नहीं है। Render में GEMINI_MODEL जाँचें।")
+        if response.status_code in (400, 401, 403):
+            logger.error("Gemini assistant request was rejected (HTTP %s)", response.status_code)
+            raise HTTPException(502, "Gemini ने API key या model access अस्वीकार किया। Render में GEMINI_API_KEY जाँचें।")
         response.raise_for_status()
         answer = response.json()["candidates"][0]["content"]["parts"][0]["text"].strip()
         if not answer:
